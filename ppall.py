@@ -39,7 +39,6 @@ def save_Html(dir_base,base_url,url1,session):
         os.makedirs(dir_base)
     start_url=base_url+url1
     save_path=os.path.join(dir_base,url1)
-    #if os.path.exists(save_path)==False:
     #请求页面
     while True:
         try:
