@@ -14,7 +14,7 @@ endday=datetime.datetime(2018,11,22)
 def gen_dir_base(rightnow):
     return os.path.join(os.path.abspath('.'),rightnow.strftime('%Y-%m-%d'),'people.paper.com.cn','rmrb','html',rightnow.strftime('%Y-%m'),rightnow.strftime('%d'),'')
 def write_file(save_path,content,write_type):
-    #print('保存位置：'+save_path)
+    ##print('保存位置：'+save_path)
     if(os.path.exists(save_path)==False):
         if(write_type=='wb'):
             with open(save_path,write_type) as f:
@@ -46,13 +46,13 @@ def save_Html(dir_base,base_url,url1,session):
             content.encoding='utf-8'
             content_soup=BeautifulSoup(content.text,'html.parser')
             break
-        except:
-            print('网络异常，尝试重连')
+        except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
+            print(str(e)+' 网络异常，尝试重连')
             time.sleep(10)
     #保存页面
     
     write_file(save_path,content.text,'w')
-    print('网页：'+url1+' 保存完毕')
+    #print('网页：'+url1+' 保存完毕')
     return content_soup
 def save_Article_Page(dir_base,base_url,content_soup,session):
     artical_url_set=set()
@@ -72,8 +72,8 @@ def save_Img(dir_base,base_url,content_soup,session):
                 try:
                     img_content=session.get(img_url)
                     break
-                except:
-                    print('网络异常，尝试重连')
+                except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
+                    print(str(e)+' 网络异常，尝试重连')
                     time.sleep(10)
             img_file_path=''
             for p in img.get('src').split('/')[:-1]:
@@ -83,9 +83,9 @@ def save_Img(dir_base,base_url,content_soup,session):
             if(os.path.exists(local_file_path)==False):
                 os.makedirs(local_file_path)
             write_file(os.path.join(dir_base,urllib.request.url2pathname(img.get('src'))),img_content.content,'wb')
-            print('图片：'+img.get('src')+' 保存完毕')
+            #print('图片：'+img.get('src')+' 保存完毕')
         #else:
-            #print('资源已存在')
+            ##print('资源已存在')
 def save_Css(dir_base,base_url,content_soup,session):
     for css in set(content_soup.findAll('link')):
         if(os.path.exists(os.path.join(dir_base,urllib.request.url2pathname(css.get('href'))))==False):
@@ -94,8 +94,8 @@ def save_Css(dir_base,base_url,content_soup,session):
                 try:
                     css_content=session.get(css_url)
                     break
-                except:
-                    print('网络异常，尝试重连')
+                except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
+                    print(str(e)+' 网络异常，尝试重连')
                     time.sleep(10)
             css_file_path=''
             for p in css.get('href').split('/')[:-1]:
@@ -105,9 +105,9 @@ def save_Css(dir_base,base_url,content_soup,session):
             if(os.path.exists(local_file_path)==False):
                 os.makedirs(local_file_path)
             write_file(os.path.join(dir_base,urllib.request.url2pathname(css.get('href'))),css_content.text,'w')
-            print('css：'+css.get('href')+' 保存完毕')
+            #print('css：'+css.get('href')+' 保存完毕')
         #else:
-            #print('资源已存在')
+            ##print('资源已存在')
 def save_Js(dir_base,base_url,content_soup,session):
     for js in set(content_soup.findAll('script')):
         if(js.get('src')!=None and js.get('src').split('/')[0]!='http:'):
@@ -117,8 +117,8 @@ def save_Js(dir_base,base_url,content_soup,session):
                     try:
                         js_content=session.get(js_url)
                         break
-                    except:
-                        print('网络异常，尝试重连')
+                    except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
+                        print(str(e)+' 网络异常，尝试重连')
                         time.sleep(10)
                 js_file_path=''
                 for p in js.get('src').split('/')[:-1]:
@@ -128,9 +128,9 @@ def save_Js(dir_base,base_url,content_soup,session):
                 if(os.path.exists(local_file_path)==False):
                     os.makedirs(local_file_path)
                 write_file(os.path.join(dir_base,urllib.request.url2pathname(js.get('src'))),js_content.text,'w')
-                print('js：'+js.get('src')+' 保存完毕')
+                #print('js：'+js.get('src')+' 保存完毕')
             #else:
-                #print('资源已存在')
+                ##print('资源已存在')
 def runapp(start=startday,end=endday):
     rightnow=start
     rightnow_Year_Month=''
@@ -164,7 +164,7 @@ def runapp(start=startday,end=endday):
         #save_path=os.path.join(dir_base,url1)
         s=requests.session()
         s.keep_alive=False
-        #print(os.path.join(dir_base,url1))
+        ##print(os.path.join(dir_base,url1))
         if(os.path.exists(os.path.join(dir_base,url1))==False):  
             content_soup=save_Html(dir_base,base_url,url1,s)
             ##以下可以注释，调试
@@ -177,17 +177,17 @@ def runapp(start=startday,end=endday):
             for pageLink in content_soup.findAll('a'):
                 if(pageLink.get('id')=='pageLink'):
                     if(pageLink.get('href')!='./nbs.D110000renmrb_01.htm'):
-                        #print(os.path.join(dir_base,pageLink.get('href')))
+                        ##print(os.path.join(dir_base,pageLink.get('href')))
                         if(os.path.exists(os.path.join(dir_base,pageLink.get('href')))==False):
                             content_soup=save_Html(dir_base,base_url,pageLink.get('href'),s)
                             save_Article_Page(dir_base,base_url,content_soup,s)
             ####################################################
-        #print(os.path.join(os.path.abspath('.'),rightnow.strftime('%Y-%m-%d'),'Start.htm'))
+        ##print(os.path.join(os.path.abspath('.'),rightnow.strftime('%Y-%m-%d'),'Start.htm'))
         shutil.copyfile(os.path.join(dir_base,url1),os.path.join(os.path.abspath('.'),rightnow.strftime('%Y-%m-%d'),'Start.htm'))
         rightnow=rightnow+datetime.timedelta(days=1)
         #i=i+1
         #break
-    #print(i)
+    ##print(i)
 
 runapp(start=datetime.datetime(2017,4,25),end=datetime.datetime(2017,8,31))
 #定时运行
