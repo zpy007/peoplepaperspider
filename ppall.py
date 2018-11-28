@@ -39,6 +39,7 @@ def save_Html(dir_base,base_url,url1,session):
         os.makedirs(dir_base)
     start_url=base_url+url1
     save_path=os.path.join(dir_base,url1)
+    #if os.path.exists(save_path)==False:
     #请求页面
     while True:
         try:
@@ -46,13 +47,14 @@ def save_Html(dir_base,base_url,url1,session):
             content.encoding='utf-8'
             content_soup=BeautifulSoup(content.text,'html.parser')
             break
-        except:
+        except Exception as e:
+            print(e.__classname__)
             print('网络异常，尝试重连')
             time.sleep(10)
     #保存页面
     
     write_file(save_path,content.text,'w')
-    print('网页：'+url1+' 保存完毕')
+    #print('网页：'+url1+' 保存完毕')
     return content_soup
 def save_Article_Page(dir_base,base_url,content_soup,session):
     artical_url_set=set()
@@ -72,7 +74,8 @@ def save_Img(dir_base,base_url,content_soup,session):
                 try:
                     img_content=session.get(img_url)
                     break
-                except:
+                except Exception as e:
+                    print(e.__classname__)
                     print('网络异常，尝试重连')
                     time.sleep(10)
             img_file_path=''
@@ -83,7 +86,7 @@ def save_Img(dir_base,base_url,content_soup,session):
             if(os.path.exists(local_file_path)==False):
                 os.makedirs(local_file_path)
             write_file(os.path.join(dir_base,urllib.request.url2pathname(img.get('src'))),img_content.content,'wb')
-            print('图片：'+img.get('src')+' 保存完毕')
+            #print('图片：'+img.get('src')+' 保存完毕')
         #else:
             #print('资源已存在')
 def save_Css(dir_base,base_url,content_soup,session):
@@ -94,7 +97,8 @@ def save_Css(dir_base,base_url,content_soup,session):
                 try:
                     css_content=session.get(css_url)
                     break
-                except:
+                except Exception as e:
+                    print(e.__classname__)
                     print('网络异常，尝试重连')
                     time.sleep(10)
             css_file_path=''
@@ -105,7 +109,7 @@ def save_Css(dir_base,base_url,content_soup,session):
             if(os.path.exists(local_file_path)==False):
                 os.makedirs(local_file_path)
             write_file(os.path.join(dir_base,urllib.request.url2pathname(css.get('href'))),css_content.text,'w')
-            print('css：'+css.get('href')+' 保存完毕')
+            #print('css：'+css.get('href')+' 保存完毕')
         #else:
             #print('资源已存在')
 def save_Js(dir_base,base_url,content_soup,session):
@@ -117,7 +121,8 @@ def save_Js(dir_base,base_url,content_soup,session):
                     try:
                         js_content=session.get(js_url)
                         break
-                    except:
+                    except Exception as e:
+                        print(e.__classname__)
                         print('网络异常，尝试重连')
                         time.sleep(10)
                 js_file_path=''
@@ -128,7 +133,7 @@ def save_Js(dir_base,base_url,content_soup,session):
                 if(os.path.exists(local_file_path)==False):
                     os.makedirs(local_file_path)
                 write_file(os.path.join(dir_base,urllib.request.url2pathname(js.get('src'))),js_content.text,'w')
-                print('js：'+js.get('src')+' 保存完毕')
+                #print('js：'+js.get('src')+' 保存完毕')
             #else:
                 #print('资源已存在')
 def runapp(start=startday,end=endday):
@@ -189,5 +194,5 @@ def runapp(start=startday,end=endday):
         #break
     #print(i)
 
-runapp(start=datetime.datetime(2017,4,25),end=datetime.datetime(2017,8,31))
-#定时运行
+runapp(start=datetime.datetime(2017,7,20),end=datetime.datetime(2018,11,27))
+
