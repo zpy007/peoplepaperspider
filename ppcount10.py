@@ -46,7 +46,7 @@ def save_Html(dir_base,base_url,url1,session):
             content.encoding='utf-8'
             content_soup=BeautifulSoup(content.text,'html.parser')
             break
-        except (requests.exceptions.ConnectionError,requests.exceptions.Connecttimeout) as e:
+        except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
             print(str(e)+' 网络异常，尝试重连')
             #time.sleep(10)
     #保存页面
@@ -72,7 +72,7 @@ def save_Img(dir_base,base_url,content_soup,session):
                 try:
                     img_content=session.get(img_url)
                     break
-                except (requests.exceptions.ConnectionError,requests.exceptions.Connecttimeout) as e:
+                except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
                     print(str(e)+' 网络异常，尝试重连')
                     #time.sleep(10)
             img_file_path=''
@@ -95,7 +95,7 @@ def save_Css(dir_base,base_url,content_soup,session):
                 try:
                     css_content=session.get(css_url)
                     break
-                except (requests.exceptions.ConnectionError,requests.exceptions.Connecttimeout) as e:
+                except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
                     print(str(e)+' 网络异常，尝试重连')
                     #time.sleep(10)
             css_file_path=''
@@ -119,7 +119,7 @@ def save_Js(dir_base,base_url,content_soup,session):
                     try:
                         js_content=session.get(js_url)
                         break
-                    except (requests.exceptions.ConnectionError,requests.exceptions.Connecttimeout) as e:
+                    except (requests.exceptions.ConnectionError,requests.exceptions.ConnectTimeout) as e:
                         print(str(e)+' 网络异常，尝试重连')
                         #time.sleep(10)
                 js_file_path=''
