@@ -13,7 +13,7 @@ startday=datetime.datetime.now()
 endday=startday
 
 def gen_dir_base(rightnow):
-    return os.path.join(os.path.abspath('.'),rightnow.strftime('%Y-%m-%d'),'people.paper.com.cn','rmrb','html',rightnow.strftime('%Y-%m'),rightnow.strftime('%d'),'')
+    return os.path.join(os.path.abspath('.'),'peoplepaper','cashed',rightnow.strftime('%Y-%m-%d'),'people.paper.com.cn','rmrb','html',rightnow.strftime('%Y-%m'),rightnow.strftime('%d'),'')
 def write_file(save_path,content,write_type):
     ##print('保存位置：'+save_path)
     if(os.path.exists(save_path)==False):
@@ -199,6 +199,6 @@ def job():
     with open('./write.txt','a') as f:
         f.write(str(datetime.datetime.now())+'\n')
 
-schedule.every().day.at('22:35').do(runapp)
+schedule.every().day.at('20:07').do(runapp)
 while True:
     schedule.run_pending()
